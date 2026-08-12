@@ -1,0 +1,29 @@
+{
+  "name": "ConsultBae - incoming person duplicate alert",
+  "nodes": [
+    {
+      "parameters": {"httpMethod": "POST", "path": "consultbae-new-person", "responseMode": "responseNode"},
+      "id": "1", "name": "Incoming person webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [260, 300]
+    },
+    {
+      "parameters": {"method": "POST", "url": "http://host.docker.internal:5000/api/check-duplicate", "sendBody": true, "specifyBody": "json", "jsonBody": "={{ JSON.stringify($json.body) }}", "options": {}},
+      "id": "2", "name": "Check SQLite-backed app API", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [500, 300]
+    },
+    {
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"}, "conditions": [{"id": "duplicate", "leftValue": "={{ $json.duplicate }}", "rightValue": true, "operator": {"type": "boolean", "operation": "true", "singleValue": true}}], "combinator": "and"}, "options": {}},
+      "id": "3", "name": "Is duplicate?", "type": "n8n-nodes-base.if", "typeVersion": 2.2, "position": [720, 300]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ { status: 'duplicate_alert', message: 'Duplicate found - route this node to Slack or email in production.', matches: $json.matches } }}", "options": {}},
+      "id": "4", "name": "Duplicate alert response", "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1.1, "position": [960, 210]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ { status: 'new_person', message: 'No duplicate found' } }}", "options": {}},
+      "id": "5", "name": "No-duplicate response", "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1.1, "position": [960, 410]
+    }
+  ],
+  "connections": {"Incoming person webhook": {"main": [[{"node": "Check SQLite-backed app API", "type": "main", "index": 0}]]}, "Check SQLite-backed app API": {"main": [[{"node": "Is duplicate?", "type": "main", "index": 0}]]}, "Is duplicate?": {"main": [[{"node": "Duplicate alert response", "type": "main", "index": 0}], [{"node": "No-duplicate response", "type": "main", "index": 0}]]}},
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "versionId": "1"
+}
