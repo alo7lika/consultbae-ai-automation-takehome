@@ -1,6 +1,6 @@
 """Small Flask audio collection app. Run `flask --app app run --debug`."""
 from __future__ import annotations
-import audioop, os, sqlite3, struct, subprocess, uuid, wave
+import math, os, sqlite3, subprocess, uuid, wave
 from pathlib import Path
 from flask import Flask, abort, jsonify, redirect, render_template, request, send_from_directory, url_for
 from ingest import normal_phone, normal_email, normal_name, display_name
@@ -18,7 +18,18 @@ def wav_metadata(path):
     with wave.open(str(path), "rb") as w:
         frames, rate, channels, width = w.getnframes(), w.getframerate(), w.getnchannels(), w.getsampwidth()
         raw=w.readframes(frames)
-        rms=audioop.rms(raw, width) if raw else 0
+        # `audioop` was removed in Python 3.13. Compute PCM RMS directly instead.
+        if not raw:
+            rms = 0
+        elif width == 1:  # unsigned 8-bit PCM
+            samples = (byte - 128 for byte in raw)
+            rms = math.sqrt(sum(sample * sample for sample in samples) / len(raw))
+        elif width == 2:
+            samples = memoryview(raw).cast("h")
+            rms = math.sqrt(sum(sample * sample for sample in samples) / len(samples))
+        else:
+            # WAV widths other than 8/16-bit remain playable, but use ffprobe metadata.
+            return media_metadata(path)
         max_rms=float(2 ** (width*8-1)); loudness=20 * __import__('math').log10(max(rms,1)/max_rms)
         return round(frames/rate,2), rate, round(rate*channels*width*8/1000,1), round(loudness,1), "WAV measured directly"
 
