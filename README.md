@@ -28,6 +28,11 @@ The entity key is a verified, normalized email **or** a verified, normalized 10-
 
 Import [`n8n/duplicate-alert-workflow.json`](n8n/duplicate-alert-workflow.json) in n8n. It accepts `POST /webhook/consultbae-new-person` with JSON such as `{"email":"tanvi.gupta31@example.com","phone":"9000000254"}`, calls the Flask app's `/api/check-duplicate`, branches visually, and returns an alert-style response for duplicates. For local n8n in Docker, `host.docker.internal:5000` reaches Flask; for desktop/cloud n8n replace that URL with your reachable app URL. In a real deployment, replace the duplicate response node with Slack/email credentials.
 
+### n8n duplicate-check workflow
+
+![n8n workflow with webhook, API check, and duplicate branch](assets/assets/Screenshot%202026-08-14%20150323.png)
+
+
 ## Data issues report
 
 | Issue | Evidence | Handling |
