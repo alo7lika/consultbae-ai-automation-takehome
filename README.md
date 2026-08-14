@@ -30,7 +30,7 @@ Import [`n8n/duplicate-alert-workflow.json`](n8n/duplicate-alert-workflow.json) 
 
 ### n8n duplicate-check workflow
 
-![n8n workflow with webhook, API check, and duplicate branch](assets/assets/Screenshot%202026-08-14%20150323.png)
+![n8n workflow with webhook, API check, and duplicate branch](assets/Screenshot%202026-08-14%20150323.png)
 
 
 ## Data issues report
