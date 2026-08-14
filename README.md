@@ -16,6 +16,10 @@ flask --app app run --debug
 
 Open `http://127.0.0.1:5000`, upload/record audio, then use the submissions view to play it and see extracted metadata. The database is `consultbae.sqlite3`; audio files are saved in `uploads/`.
 
+### Audio collection form
+
+![Audio collection form](assets/Screenshot%202026-08-14%20150146.png)
+
 ## Match design
 
 The entity key is a verified, normalized email **or** a verified, normalized 10-digit Indian phone. Names are deliberately not used as a merge key: they are not stable enough. This links Naukri ↔ Gig Workers by email and Naukri ↔ CBNexus by phone. A match requiring conflicting IDs is skipped and logged for manual review. The raw provenance of every accepted row remains in `person_sources`.
