@@ -155,7 +155,7 @@ Test payload:
 > For a production deployment, replace the duplicate response node with Slack, email, or another alerting destination using real credentials.
 
 ---
-![n8n duplicate-check workflow]((assets/Screenshot%202026-08-14%20150323.png)
+![n8n duplicate-check workflow](assets/Screenshot%202026-08-14%20150323.png)
 
 ## 3. Audio Collection App
 
