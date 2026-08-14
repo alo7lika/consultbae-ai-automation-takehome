@@ -81,6 +81,7 @@ Created consultbae.sqlite3: 60 people, 10 logged issues
 Open [http://127.0.0.1:5000](http://127.0.0.1:5000). Submit an audio file, then open the submissions view to play it and inspect its metadata.
 
 ---
+![Audio app](assets/Screenshot%202026-08-14%20150146.png)
 
 ## 1. Entity Resolution and Data Merge
 
@@ -154,6 +155,7 @@ Test payload:
 > For a production deployment, replace the duplicate response node with Slack, email, or another alerting destination using real credentials.
 
 ---
+![n8n duplicate-check workflow]((assets/Screenshot%202026-08-14%20150323.png)
 
 ## 3. Audio Collection App
 
